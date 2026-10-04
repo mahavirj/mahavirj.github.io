@@ -1,0 +1,39 @@
+---
+layout: default
+---
+
+<div class="home">
+  <section class="hero">
+    <p class="hero-kicker">embedded · iot · security</p>
+    <h1 class="hero-title">{{ page.title | default: site.title | escape }}</h1>
+    <p class="hero-lead">{{ site.description | escape }}</p>
+  </section>
+
+  {{ content }}
+
+  {%- if site.posts.size > 0 -%}
+    <h2 class="post-list-heading">{{ page.list_title | default: "Latest posts" }}</h2>
+    <ul class="post-list">
+      {%- for post in site.posts -%}
+      <li>
+        <article class="post-card">
+          {%- include post-meta.html post=post -%}
+          <h3>
+            <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+          </h3>
+          {%- if site.show_excerpts -%}
+            <div class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 45 }}</div>
+          {%- endif -%}
+          {%- if post.categories.size > 0 -%}
+            <div class="tags">
+              {%- for tag in post.categories -%}<span class="tag">{{ tag }}</span>{%- endfor -%}
+            </div>
+          {%- endif -%}
+        </article>
+      </li>
+      {%- endfor -%}
+    </ul>
+
+    <p class="rss-subscribe">Subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
+  {%- endif -%}
+</div>
