@@ -1,0 +1,60 @@
+--- a/main/https_request_example_main.c
++++ b/main/https_request_example_main.c
+@@ -118,9 +118,9 @@
+     }
+ 
+     if (esp_tls_conn_http_new_sync(WEB_SERVER_URL, &cfg, tls) == 1) {
+-        ESP_LOGI(TAG, "Connection established...");
++        ESP_LOGI(TAG, "Connection established... (TLS HANDSHAKE OK)");
+     } else {
+-        ESP_LOGE(TAG, "Connection failed...");
++        ESP_LOGE(TAG, "Connection failed... (TLS HANDSHAKE FAILED)");
+         int esp_tls_code = 0, esp_tls_flags = 0;
+         esp_tls_error_handle_t tls_e = NULL;
+         esp_tls_get_error_handle(tls, &tls_e);
+@@ -199,6 +199,30 @@
+ }
+ #endif // CONFIG_MBEDTLS_CERTIFICATE_BUNDLE && CONFIG_EXAMPLE_USING_ESP_TLS_MBEDTLS
+ 
++
++/* eMudhra ICA compromise check: existing public test hosts, all verified through the bundle only. */
++struct emudhra_host { const char *name; const char *host; const char *path; };
++static const struct emudhra_host emudhra_hosts[] = {
++    { "FORGED-G3",  "dv-g3b-emudhra.we-have-a-problem.com",     "/" },
++    { "FORGED-AAA", "dv-g3b-aaa-emudhra.we-have-a-problem.com", "/" },
++    { "CONTROL",    "www.howsmyssl.com",                         "/a/check" },
++};
++
++static void https_emudhra_matrix(void)
++{
++    for (int i = 0; i < sizeof(emudhra_hosts) / sizeof(emudhra_hosts[0]); i++) {
++        const struct emudhra_host *h = &emudhra_hosts[i];
++        char url[160], req[320];
++        snprintf(url, sizeof(url), "https://%s%s", h->host, h->path);
++        snprintf(req, sizeof(req), "GET %s HTTP/1.1\r\nHost: %s\r\nUser-Agent: esp-idf/1.0 esp32\r\nConnection: close\r\n\r\n", url, h->host);
++        ESP_LOGI(TAG, "EMUDHRA_TEST %s BEGIN %s", h->name, h->host);
++        esp_tls_cfg_t cfg = { .crt_bundle_attach = esp_crt_bundle_attach };
++        https_get_request(cfg, url, req);
++        ESP_LOGI(TAG, "EMUDHRA_TEST %s END", h->name);
++    }
++    ESP_LOGI(TAG, "EMUDHRA_MATRIX_DONE");
++}
++
+ static void https_get_request_using_cacert_buf(void)
+ {
+     ESP_LOGI(TAG, "https_request using cacert_buf");
+@@ -306,13 +330,7 @@
+     https_get_request_using_already_saved_session(server_url);
+ #endif
+ 
+-#if CONFIG_MBEDTLS_CERTIFICATE_BUNDLE && CONFIG_EXAMPLE_USING_ESP_TLS_MBEDTLS
+-    https_get_request_using_crt_bundle();
+-#endif
+-    ESP_LOGI(TAG, "Minimum free heap size: %" PRIu32 " bytes", esp_get_minimum_free_heap_size());
+-    https_get_request_using_cacert_buf();
+-    https_get_request_using_global_ca_store();
+-    https_get_request_using_specified_ciphersuites();
++    https_emudhra_matrix();
+     ESP_LOGI(TAG, "Finish https_request example");
+     vTaskDelete(NULL);
+ }

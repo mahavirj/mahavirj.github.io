@@ -1,0 +1,8 @@
+# Wi-Fi credentials the emulator's soft AP answers to by default
+CONFIG_EXAMPLE_CONNECT_WIFI=y
+CONFIG_EXAMPLE_WIFI_SSID="myssid"
+CONFIG_EXAMPLE_WIFI_PASSWORD="mypassword"
+# Mirror a product build: full Mozilla bundle, not the example's trimmed preset
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL=y
+# Flip to =n for the legacy verification path
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE_CROSS_SIGNED_VERIFY=y
