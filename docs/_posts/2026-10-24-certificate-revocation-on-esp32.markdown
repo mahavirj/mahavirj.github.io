@@ -117,7 +117,11 @@ desktops, IoT devices are uniquely vulnerable:
 
 Normally, TLS certificate validation blocks network attacks: even if redirected,
 the device rejects the impostor. **Leaked intermediate keys completely destroy
-this defence.** Once bypassed, the fallout is severe:
+this defence.** Worse, attackers no longer need to extract keys or craft chains
+manually—standard interception tools like `mitmproxy` already ship the
+compromised eMudhra keys behind a built-in CLI flag, turning local-network
+redirection into a one-command TLS interception attack. Once bypassed, the
+fallout is severe:
 
 1. **Credential & Telemetry Interception:** Decrypting traffic exposes API keys,
    tokens, device credentials, and sensitive sensor streams in plaintext.
@@ -325,6 +329,7 @@ path is both a security exposure and a compliance failure.
 - Removal of emSign ECC Root CA - G3: <https://bugzilla.mozilla.org/show_bug.cgi?id=2084101>
 - Mozilla's write-up: <https://blog.mozilla.org/security/2026/10/20/protecting-firefox-users-following-the-compromise-of-emudhra-intermediate-certificates/>
 - Test hosts, chains and proofs: <https://emudhra.we-have-a-problem.com/> (source: <https://github.com/galadran/we-have-a-problem.com>)
+- Mitmproxy 12.3 release notes (`--emudhra`): <https://www.mitmproxy.org/posts/releases/mitmproxy-12.3/>
 - ESP Emulator: <https://github.com/espressif/esp-emulator>
 - ESP-IDF certificate bundle documentation: <https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/protocols/esp_crt_bundle.html>
 - Sample app patch and sdkconfig fragment from this post:
