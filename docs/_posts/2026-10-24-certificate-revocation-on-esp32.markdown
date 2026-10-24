@@ -24,7 +24,7 @@ the upstream certificate bundle snapshot behaves on ESP32, what it means for
 device security and regulatory compliance, and how you can test your own
 firmware in minutes without hardware. Links to primary sources are at the end.
 
-## Five words you need
+## The vocabulary of trust
 
 If you work with TLS every day, skip ahead. For everyone else, here is the
 vocabulary in plain English:
@@ -72,10 +72,29 @@ This is not a bug in an SDK—it is the reality of constrained hardware. The
 eMudhra incident just makes it unusually obvious, because the attack requires
 nothing but public data.
 
-## How the ESP32 validates certificates
+## Your ESP32 is a browser
 
-An ESP32 running ESP-IDF connects over TLS using `esp_crt_bundle`, which compresses
-Mozilla's root list into ~55 KB of flash (roughly 120 roots).
+Why does a compromised web CA matter to a microcontroller? Because in modern IoT,
+**an ESP32 acts like a headless browser**.
+
+Firmware rarely talks to a single fixed IP anymore. An ESP32 fetches OTA images
+from S3 or CloudFront, posts telemetry to cloud brokers, calls third-party REST
+APIs, and hits webhooks behind CDNs that rotate certificates and switch CAs
+automatically. Hardcoding or pinning a single server certificate breaks the
+moment a cloud ops team rotates keys.
+
+To give the ESP32 browser-grade HTTPS compatibility within microcontroller
+constraints, ESP-IDF ships [`esp_crt_bundle`](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/protocols/esp_crt_bundle.html). Instead of storing full PEM
+files, the build system strips Mozilla's `cacert.pem` down to just each root's
+subject name and public key—packing **~120 global root CAs into ~55 KB of
+flash**.
+
+The catch: by adopting Mozilla's root store, **the ESP32 inherits a browser's
+entire trust surface without the browser's safety net.** If *any* of those ~120
+CAs—even one your backend has never used, like eMudhra—suffers a key compromise,
+your device will trust certificates forged with it for `ota.example.com`.
+
+## How the ESP32 validates certificates
 
 Suppose a fleet of devices connects to `ota.example.com` for firmware updates.
 An attacker calculates the weak eMudhra intermediate key, creates a forged
