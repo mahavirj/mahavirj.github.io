@@ -28,8 +28,10 @@ github_username:  mahavirj
 
 # Build settings
 theme: minima
+permalink: /:year/:month/:day/:title/
 plugins:
   - jekyll-feed
+  - jekyll-redirect-from
 
 # Theme options
 show_excerpts: true

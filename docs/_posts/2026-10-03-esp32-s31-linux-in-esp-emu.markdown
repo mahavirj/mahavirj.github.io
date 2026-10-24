@@ -3,6 +3,8 @@ layout: post
 title:  "Booting ESP32-S31 Linux in an emulator"
 date:   2026-10-03 21:00:00 +0530
 categories: linux esp32s31 buildroot
+redirect_from:
+  - /linux/esp32s31/buildroot/2026/10/03/esp32-s31-linux-in-esp-emu.html
 ---
 
 Espressif's ESP32-S31 can run Linux, and the full stack — SPL, OpenSBI, U-Boot,
