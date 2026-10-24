@@ -18,9 +18,80 @@ layout: default
     {%- endif -%}
   </header>
 
-  <div class="post-content e-content" itemprop="articleBody">
-    {{ content }}
+  <div class="post-body">
+    {%- if page.toc != false -%}
+    <aside class="post-toc" id="post-toc" aria-label="Table of contents" hidden>
+      <nav class="toc-nav">
+        <details class="toc-details" id="toc-details">
+          <summary class="toc-title">On this page</summary>
+          <ul class="toc-list" id="toc-list"></ul>
+        </details>
+      </nav>
+    </aside>
+    {%- endif -%}
+
+    <div class="post-content e-content" itemprop="articleBody">
+      {{ content }}
+    </div>
   </div>
+
+  {%- if page.toc != false -%}
+  <script>
+    (function () {
+      var content = document.querySelector('.post-content');
+      var toc = document.getElementById('post-toc');
+      var details = document.getElementById('toc-details');
+      var list = document.getElementById('toc-list');
+      if (!content || !toc || !details || !list) return;
+
+      var headings = content.querySelectorAll('h2[id]');
+      if (headings.length < 2) return;
+
+      var desktopMq = window.matchMedia('(min-width: 1320px)');
+      function syncOpen() { details.open = desktopMq.matches; }
+      syncOpen();
+      if (desktopMq.addEventListener) {
+        desktopMq.addEventListener('change', syncOpen);
+      }
+
+      var links = [];
+      headings.forEach(function (h) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent;
+        a.addEventListener('click', function () {
+          if (!desktopMq.matches) details.open = false;
+        });
+        li.appendChild(a);
+        list.appendChild(li);
+        links.push({ id: h.id, el: a });
+      });
+      toc.hidden = false;
+
+      function setActive(id) {
+        links.forEach(function (item) {
+          item.el.classList.toggle('is-active', item.id === id);
+        });
+      }
+
+      if ('IntersectionObserver' in window) {
+        var activeId = headings[0].id;
+        setActive(activeId);
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              activeId = entry.target.id;
+              setActive(activeId);
+            }
+          });
+        }, { rootMargin: '-80px 0px -70% 0px', threshold: 0 });
+
+        headings.forEach(function (h) { observer.observe(h); });
+      }
+    })();
+  </script>
+  {%- endif -%}
 
   {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}
