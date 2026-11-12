@@ -120,7 +120,8 @@ name and password that ESP-IDF examples use, so no configuration is needed.
 
 ### 1. Get the example and build it
 
-The example needs a recent ESP-IDF master (it uses Mbed TLS 4.x).
+The example branch is based on the ESP-IDF v6.1 release (it uses Mbed TLS 4.x),
+so run these commands in an ESP-IDF v6.1 checkout.
 
 ```sh
 cd $IDF_PATH
