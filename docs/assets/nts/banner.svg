@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" width="100%" role="img" aria-label="NTS on the ESP32: a chip holding a clock inside a shield" font-family="Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <rect x="1" y="1" width="898" height="218" rx="10" fill="#0d1117" stroke="#2a313c" stroke-width="2"/>
+
+  <!-- chip: pins, body, pin-1 mark -->
+  <g stroke="#8b949e" stroke-width="5" stroke-linecap="round">
+    <line x1="209" y1="34" x2="209" y2="48"/> <line x1="209" y1="172" x2="209" y2="186"/> <line x1="173" y1="70" x2="187" y2="70"/> <line x1="311" y1="70" x2="325" y2="70"/> <line x1="229" y1="34" x2="229" y2="48"/> <line x1="229" y1="172" x2="229" y2="186"/> <line x1="173" y1="90" x2="187" y2="90"/> <line x1="311" y1="90" x2="325" y2="90"/> <line x1="249" y1="34" x2="249" y2="48"/> <line x1="249" y1="172" x2="249" y2="186"/> <line x1="173" y1="110" x2="187" y2="110"/> <line x1="311" y1="110" x2="325" y2="110"/> <line x1="269" y1="34" x2="269" y2="48"/> <line x1="269" y1="172" x2="269" y2="186"/> <line x1="173" y1="130" x2="187" y2="130"/> <line x1="311" y1="130" x2="325" y2="130"/> <line x1="289" y1="34" x2="289" y2="48"/> <line x1="289" y1="172" x2="289" y2="186"/> <line x1="173" y1="150" x2="187" y2="150"/> <line x1="311" y1="150" x2="325" y2="150"/>
+  </g>
+  <rect x="187" y="48" width="124" height="124" rx="12" fill="#161b22" stroke="#8b949e" stroke-width="3"/>
+  <circle cx="200" cy="61" r="3.5" fill="#8b949e"/>
+
+  <!-- shield -->
+  <path d="M 249 64 L 285 77 V 108 C 285 132 270 148 249 158 C 228 148 213 132 213 108 V 77 Z"
+        fill="#0d1117" stroke="#ff7a59" stroke-width="3.5" stroke-linejoin="round"/>
+
+  <!-- clock inside the shield -->
+  <circle cx="249" cy="107" r="21" fill="none" stroke="#6cb6ff" stroke-width="3"/>
+  <path d="M 249 93 V 107 L 259 114" fill="none" stroke="#f0f4f8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- title -->
+  <text x="365" y="125" fill="#f0f4f8" font-size="42" font-weight="700">NTS on the ESP32</text>
+</svg>
